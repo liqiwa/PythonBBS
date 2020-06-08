@@ -1,0 +1,43 @@
+#创建表语句
+#mysql 5.7.22   mysqlworkbench 8.0.12
+use mysql;
+select * from  user;
+#创建用户表
+create table  users(
+user_id int(8) not null auto_increment,
+user_name varchar(30) not null ,
+user_pass varchar(255) not null,
+user_email varchar(255)not null,
+user_date datetime not null,
+user_level int(8) not null,
+unique index user_name_unique(user_name),
+primary key (user_id)
+)ENGINE = INNODB;
+#创建主题表
+create table topics(
+topic_id int(8) not null auto_increment,
+topic_subject varchar(255) not null,
+topic_date datetime not null,
+topic_cat int(8)not null,
+topic_by int(8) not null,
+primary key (topic_id)
+)ENGINE = INNODB;
+
+#创建分类表
+create table categories(
+cat_id int(8) not null auto_increment,
+cat_name varchar(255) not null ,
+cat_description varchar(255) not null,
+unique index cat_name_unique(cat_name),
+primary key (cat_id)
+)engine= INNODB;
+
+#创建发布信息
+create table posts(
+post_id int(8) not null auto_increment,
+post_content  text  not null,
+post_date datetime not null,
+post_topic int(8) not null,
+post_by int (8) not null,
+primary key (post_id)
+)engine = innodb;

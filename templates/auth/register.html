@@ -6,13 +6,13 @@
     <title>Register</title>
 </head>
 <body>
-<form action="/register" method="POST">
+<form action="/auth/register" method="post">
      <label for="username" >用户名：</label>
-        <input name="uername" id="username">
-    <label for="passwd">密码：</label>
-        <input  name="passwd" id="passwd">
+        <input name="username" id="username" required></input>
+    <label for="userpass">密码：</label>
+    <input type="password" name="userpass" id="userpass" required></input>
     <label for="usermail">邮箱:</label>
-        <input name="usermail" id="usermail"></input>
+        <input name="usermail" id="usermail" required></input>
     <input type="submit" value="注册"></p>
 </form>
 </body>

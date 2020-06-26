@@ -1,11 +1,40 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Title</title>
+<!doctype html>
+<title>{% block title %}{% endblock %}我的论坛</title>
+<link rel="stylesheet" href = "{{ url_for('static',filename='style.css' ) }}">
 
-</head>
-<body>
+ <h1>力奇蛙的论坛</h1>
 
+<body style="position: relative;">
+	<div id = "header">
+		<div class="myform-header">
+			<div class="head-logo">
+				<a class="myform-logo" title="我的BBS" href="/index"></a>
+			</div>
+			<ul class="head-nav">
+				<li class="head-nav-index">
+					<a href="{{ url_for('blog.index') }}">首页</a>
+				</li>
+				<li class="head-nav-createtopic">
+					<a href="{{ url_for('blog.topic') }}">创建主题</a>
+				</li>
+				<li class="head-nav-createcatego">
+					<a href="{{ url_for('blog.category') }}">创建分类</a>
+				</li>
+                {% if g.user %}
+                <li><span>{{ g.user['username']}}</span></li>
+				<li class="head-nav-register">
+					<a href="{{ url_for('auth.logout')}}">退出</a>
+				</li>
+                {% else %}
+				<li class="head-nav-login">
+					<a href="{{ url_for('auth.login') }}">登陆</a>
+				</li>
+				<li class="head-nav-register">
+					<a href="{{ url_for('auth.register') }}">注册</a>
+				</li>
+                {% endif %}
+			</ul>
+
+		</div>
 </body>
 </html>

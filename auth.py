@@ -26,7 +26,7 @@ def register():
         print('444 + %',username)
         userpass = request.form['userpass']
         usermail = request.form['usermail']
-        userdate = datetime.date.today()
+        userdate = datetime.datetime.now().replace(microsecond=0)
         userlevel = '1'
         new_users = db.Users(user_name=username,user_pass = userpass,user_email = usermail,
                           user_date = userdate,user_level = userlevel)

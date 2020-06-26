@@ -1,4 +1,4 @@
-import os
+import os,datetime
 from flask import Flask,render_template
 import auth,blog
 from db import get_db
@@ -10,11 +10,13 @@ app = Flask(__name__)
     #@app.route('')
     # app.register_blueprint(bp)
 print('111')
+print('现在时间是% %',datetime.datetime.now().replace(microsecond=0))
 app.register_blueprint(auth.bp)
 app.register_blueprint(blog.bg)
 @app.route('/')
 def home():
-     return render_template('/blog/index.html')
+
+    return render_template('/blog/index.html')
 
 if __name__ == '__main__':
     app.run()

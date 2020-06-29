@@ -44,5 +44,5 @@ class Posts(Base):
 def get_db():
     engine = create_engine('mysql+mysqlconnector://root:123@localhost:3306/pybbs')
     DBsession = sessionmaker(bind=engine)
-    session = DBsession()
-    return  session
+    dbsession = DBsession()
+    return  dbsession

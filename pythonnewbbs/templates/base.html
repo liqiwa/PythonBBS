@@ -1,15 +1,12 @@
 <!doctype html>
-<title>{% block title %}{% endblock %}我的论坛</title>
-<link rel="stylesheet" href = "{{ url_for('static',filename='style.css' ) }}">
+<html lang="zh-cn">
+<title>我的论坛</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href = "../static/style.css">
+<!--{{ url_for('static',filename='style.css' ) }}-->
+ <h3>力奇蛙的论坛</h3>
+<body>
 
- <h1>力奇蛙的论坛</h1>
-
-<body style="position: relative;">
-	<div id = "header">
-		<div class="myform-header">
-			<div class="head-logo">
-				<a class="myform-logo" title="我的BBS" href="/index"></a>
-			</div>
 			<ul class="head-nav">
 				<li class="head-nav-index">
 					<a href="{{ url_for('blog.index') }}">首页</a>
@@ -35,7 +32,6 @@
                 {% endif %}
 			</ul>
 
-		</div>
 		<section class="content">
 			<header>
 				{% block header %}{% endblock %}

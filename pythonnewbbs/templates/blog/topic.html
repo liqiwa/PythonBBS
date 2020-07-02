@@ -2,5 +2,24 @@
 {%extends 'base.html'%}
 
 {% block content %}
-<h3>我是主题表</h3>
+<h4>创建主题</h4>
+<form method="post">
+    <p>
+        <label for="topic_subject">主题名称</label>
+    <input type="text" name = "topic_subject" id ="topic_subject" required></input><br>
+        <label for="topic_cat">类别信息</label>
+
+        <select name="topic_cat" required>
+            {% for post in posts %}
+            <option value="{{post['cat_id']}}">
+                {{post['cat_name']}}
+            </option>
+               {% endfor%}
+        </select></br>
+
+     <label for = "post_content">信息</label>
+    <textarea name = "post_content" id = "post_content" required></textarea><br>
+        <input type="submit" value="增加主题"> <br>
+    </p>
+</form>
 {% endblock %}

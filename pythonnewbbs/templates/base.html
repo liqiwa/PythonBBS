@@ -18,10 +18,11 @@
 					<a href="{{ url_for('blog.category') }}">创建分类</a>
 				</li>
                 {% if g.user %}
-                <li><span>{{ g.user['username']}}</span></li>
+
 				<li class="head-nav-register">
 					<a href="{{ url_for('auth.logout')}}">退出</a>
 				</li>
+				<li><span style="color:blue">{{ g.user['user_name']}}，已经登陆 </span></li>
                 {% else %}
 				<li class="head-nav-login">
 					<a href="{{ url_for('auth.login') }}">登陆</a>

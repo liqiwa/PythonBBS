@@ -1,7 +1,14 @@
 
 {% extends 'base.html' %}
 {% block content %}
-
-<h3>我是分类表</h3>
-
+<h4>创建分类</h4>
+<form method="post">
+    <p>
+        <label for="catname">类别名称</label>
+    <input type="text" name = "catname" id ="catname" required></input><br>
+     <label for = "catdescription">描述信息</label>
+    <textarea name = "catdescription" id = "catdescription" required></textarea><br>
+        <input type="submit" value="增加分类"> <br>
+    </p>
+</form>
 {% endblock %}

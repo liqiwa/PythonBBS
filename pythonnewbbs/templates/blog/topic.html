@@ -9,12 +9,14 @@
     <input type="text" name = "topic_subject" id ="topic_subject" required></input><br>
         <label for="topic_cat">类别信息</label>
 
-        <select name="topic_cat" required>
+        <select name="topic_cat">
+
             {% for post in posts %}
-            <option value="{{post['cat_id']}}">
+            <option value="{{post['cat_id']}}" required>
                 {{post['cat_name']}}
             </option>
-               {% endfor%}
+            {% endfor %}
+
         </select></br>
 
      <label for = "post_content">信息</label>

@@ -1,1 +1,26 @@
 {%extends 'base.html'%}
+{% block content %}
+<table border="1">
+   <tr>
+       <th>分类</th>
+       <th>最近的主题</th>
+   </tr>
+    {% for post in posts%}
+    <tr>
+        <td>
+            <h3><a href="{{url_for('blog.topicchat',id = post.cat_id)}}">{{post.cat_name}} ({{post.total}})</a>
+            </h3>
+            {{post.cat_description}}
+        </td>
+        <td><h3>{{post.topic_subject}} </h3> <h4>发布于： {{post.topic_date}}</h4></td>
+    </tr>
+
+    {% endfor %}
+
+
+</table>
+
+
+
+
+{% endblock %}

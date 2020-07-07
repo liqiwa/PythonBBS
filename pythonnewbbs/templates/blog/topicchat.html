@@ -1,0 +1,30 @@
+
+
+{%extends 'base.html'%}
+{% block content %}
+<table border="1">
+   <tr>
+       <th>主题</th>
+       <th>创建人</th>
+       <th>创建时间</th>
+   </tr>
+    {% for post in posts%}
+    <tr>
+        <td>
+            <h3><a href="{{url_for('blog.replychat',id = post.topic_id)}}">{{post.topic_subject}}</a>
+            </h3>
+
+        </td>
+        <td><h3>{{post.user_name}}</h3></td>
+        <td><h3>{{post.topic_date}} </h3></td>
+    </tr>
+
+    {% endfor %}
+
+
+</table>
+
+
+
+
+{% endblock %}

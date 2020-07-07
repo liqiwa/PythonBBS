@@ -24,7 +24,8 @@ class Topics(Base):
     topic_subject = Column(String(255),nullable=False)
     topic_date = Column(DateTime,nullable=False)
     topic_cat = Column(Integer,nullable=False)
-    topic_by = Column(Integer,nullable=False)
+    topic_by = Column(Integer,ForeignKey("users.user_id",ondelete="RESTRICT"),nullable=False)
+    users = relationship("Users",backref = "topics_of_users")
 #创建分类表
 class Categories(Base):
     __tablename__ = 'categories'

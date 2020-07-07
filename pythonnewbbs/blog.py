@@ -1,8 +1,10 @@
 #完成主题数据的维护和更新
 import datetime
 from flask import Blueprint, render_template,abort,request,redirect,url_for,flash,session,g
+from sqlalchemy import join,outerjoin
 from pythonnewbbs import db
-from pythonnewbbs.db import Categories,Topics,Posts
+from pythonnewbbs.auth import login_required
+from pythonnewbbs.db import Categories,Topics,Posts,Users
 
 #声明蓝图
 bp  =Blueprint("blog",__name__)
@@ -18,7 +20,7 @@ def topic():
             if  len(posts) == 0:
                 error = '类别为空，联系管理员添加类别'
             else:
-                return  render_template('blog/topic.html',posts = posts)
+                return  render_template('blog/createtopic.html',posts = posts)
             flash(error)
         if request.method == 'POST':
             error = None
@@ -47,7 +49,7 @@ def topic():
                     dbsession.close
                     return redirect(url_for('blog.topic'))
             flash(error)
-        return render_template('blog/topic.html')
+        return render_template('blog/createtopic.html')
 
 def get_post(id, check_author=True):
     """Get a post and its author by id.
@@ -93,10 +95,43 @@ def category():
 
             return redirect(url_for('blog.category'))
         flash(error)
-    return render_template('blog/category.html')
+    return render_template('blog/createcategory.html')
 
 @bp.route('/')
 def index():
     dbsession = db.get_db()
-    posts = dbsession.query(db.Topics).all()
+    #联合topic，category 查询 展示
+    sql = """select   cc.cat_id,cc.cat_name,cc.cat_description,cc.total,tt.topic_subject,tt.topic_date
+from  (
+ 
+select t.topic_cat,t.topic_subject,t.topic_date,count(1)as row_num from topics t left join topics o on t.topic_cat = o.topic_cat where  t.topic_date <= o.topic_date group by t.topic_cat,t.topic_date,t.topic_subject
+)tt ,(
+select c.cat_id,c.cat_name,c.cat_description,count(1) total from categories c,topics t 
+where c.cat_id = t.topic_cat group by c.cat_id,c.cat_name,c.cat_description
+) cc
+where tt.topic_cat = cc.cat_id and tt.row_num =1;"""
+    posts = dbsession.execute(sql).fetchall()
+
     return render_template('blog/index.html', posts=posts)
+#查询各个主题信息
+@bp.route('/<int:id>/topicchat',methods = ('GET','POST'))
+@login_required
+def topicchat(id):
+
+    dbsession = db.get_db()
+    posts = dbsession.query(Topics.topic_id,Topics.topic_subject,Topics.topic_date,Users.user_name).join(
+        Users,Topics.topic_by == Users.user_id).filter(Topics.topic_cat == id).all()
+
+
+    return render_template('blog/topicchat.html',posts = posts)
+#展示各个主题的回复明细
+@bp.route('/<int:id>/replychat',methods = ('GET','POST'))
+@login_required
+def replychat(id):
+    print('这个是获取到的主题ID：', id)
+    dbsession = db.get_db()
+    posts = dbsession.query(Posts.post_id,Posts.post_content,Posts.post_date,
+                            Topics.topic_subject,Users.user_name).outerjoin(
+        Users,Posts.post_by == Users.user_id).outerjoin(
+        Topics,Posts.post_topic == Topics.topic_id).filter(Topics.topic_id == id).all()
+    return render_template('blog/replychat.html',posts = posts)

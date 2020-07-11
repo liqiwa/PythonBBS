@@ -158,7 +158,10 @@ input.danger {
 input[type=submit] {
 
             width: 60px;
-
+.textarea{
+     width:30px
+     height:40px
+}
 }
   label{
             cursor: pointer;

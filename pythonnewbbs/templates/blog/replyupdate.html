@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post">
+    {% for post in posts %}
+
+<label name="post_id" id="post_id">更新内容</label>
+    <textarea name="post_content" id = "post_content">{{post.post_content}}</textarea>
+<input type="submit" value="确认更新">
+</form>
+
+{% endfor %}
+
+
+{% endblock %}

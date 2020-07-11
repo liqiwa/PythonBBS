@@ -129,9 +129,61 @@ def topicchat(id):
 @login_required
 def replychat(id):
     print('这个是获取到的主题ID：', id)
-    dbsession = db.get_db()
-    posts = dbsession.query(Posts.post_id,Posts.post_content,Posts.post_date,
-                            Topics.topic_subject,Users.user_name).outerjoin(
+    if request.method =='GET':
+        dbsession = db.get_db()
+        posts = dbsession.query(Posts.post_id,Posts.post_content,Posts.post_date,
+                            Topics.topic_subject,Users.user_name,Users.user_id).outerjoin(
         Users,Posts.post_by == Users.user_id).outerjoin(
         Topics,Posts.post_topic == Topics.topic_id).filter(Topics.topic_id == id).all()
-    return render_template('blog/replychat.html',posts = posts)
+        return render_template('blog/replychat.html',posts = posts)
+    if request.method =='POST':
+        #获取关于该主题的回复
+        reply_content = request.form['reply_content']
+        posts_date = datetime.datetime.now().replace(microsecond=0)
+        posts_topic = id
+        posts_by = session['user_id']
+        #连接数据库插入
+        dbsession = db.get_db()
+        newposts = Posts(post_by = posts_by,post_date = posts_date,
+                         post_content = reply_content,post_topic = id)
+        dbsession.add(newposts)
+        dbsession.commit()
+        dbsession.close
+        #添加入参，为刚才主题的博客，再次转到当前页面，及时刷新，信息可以立刻看到。
+        return redirect(url_for('blog.replychat',id =id))
+    return render_template('blog/replychat.html')
+@bp.route('/<int:id>/replyupdate',methods = ('GET','POST'))
+@login_required
+def replyupdate(id):
+    #展示要更新的源数据
+    if  request.method =='GET':
+        post_id = id
+        dbsession = db.get_db()
+        posts = dbsession.query(Posts).filter(Posts.post_id == id).all()
+        return render_template('blog/replyupdate.html',posts = posts)
+    #提交后，获取更新内容，进行更新
+    if  request.method == 'POST':
+        post_id = id
+        post_content = request.form['post_content']
+        post_date = datetime.datetime.now().replace(microsecond=0)
+        dbsession = db.get_db()
+        updatepost = dbsession.query(Posts).filter(
+        Posts.post_id == post_id).update({Posts.post_content:post_content,Posts.post_date:post_date})
+        #从要更新的内容获得上级回复主题信息，做为跳转
+        post_topic = dbsession.query(Posts.post_topic).filter(Posts.post_id == post_id).first()
+        dbsession.commit()
+        dbsession.close
+        return redirect(url_for('blog.replychat',id = post_topic[0]))
+
+@bp.route('/<int:id>/replydelete',methods = ('GET','POST'))
+@login_required
+def replydelete(id):
+    if  request.method =='POST':
+        post_id = id
+        dbsession = db.get_db()
+        post_topic = dbsession.query(Posts.post_topic).filter(Posts.post_id == post_id).first()
+        dbsession.query(Posts).filter(Posts.post_id == post_id).delete()
+        dbsession.commit()
+        dbsession.close
+        return redirect(url_for('blog.replychat',id = post_topic[0]))
+    return render_template('blog/replyupdate.html')

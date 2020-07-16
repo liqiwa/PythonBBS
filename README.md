@@ -24,7 +24,7 @@
 <img src="https://github.com/liqiwa/PythonBBS/blob/master/image/topic.png" width="600" height="400"></br>
 
 
-<h3>5.回复</h3>
+<h3>5.回复.本人回复信息可以编辑和删除</h3>
 
 <img src="https://github.com/liqiwa/PythonBBS/blob/master/image/reply.png" width="600" height="400"></br>
 
